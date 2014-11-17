@@ -21,6 +21,44 @@
 extern "C" {
 #endif
 
+
+enum WIFI_CHIP_TYPE_LIST{
+    RTL8188CU = 0,
+    RTL8192CU,
+    RTL8188EU,
+    BCM4330,
+    RK901,
+    RK903,
+    AP6335,
+    AP6234,
+    AP6441,
+    MT7601,
+    RTL8723AS,
+    RTL8723AU,
+    RTL8723BS,
+    RTL8723BU,
+    RTL8192DU,
+    MT6620,
+    ESP8089,
+    NUM_MAX,
+};
+
+enum {
+    KERNEL_VERSION_3_0_8 = 1,
+    KERNEL_VERSION_3_0_36,
+    KERNEL_VERSION_3_10,
+};
+
+int check_wifi_chip_type(void);
+
+int rk_wifi_power_ctrl(int on);
+
+int rk_wifi_load_driver(int enable);
+
+int check_wireless_ready(void);
+
+int get_kernel_version(void);
+
 /**
  * Load the Wi-Fi driver.
  *
