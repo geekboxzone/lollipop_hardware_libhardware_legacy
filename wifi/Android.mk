@@ -25,8 +25,13 @@ ifdef WIFI_DRIVER_FW_PATH_PARAM
 LOCAL_CFLAGS += -DWIFI_DRIVER_FW_PATH_PARAM=\"$(WIFI_DRIVER_FW_PATH_PARAM)\"
 endif
 
-LOCAL_SRC_FILES += wifi/wifi.c
 LOCAL_SRC_FILES += wifi/rk_wifi_ctrl.c
+
+ifeq ($(strip $(BOARD_CONNECTIVITY_VENDOR)), RealTek)
+LOCAL_SRC_FILES += ../realtek/wlan/libhardware_legacy/wifi/wifi_realtek.c
+else
+LOCAL_SRC_FILES += wifi/wifi.c
+endif
 
 ifdef WPA_SUPPLICANT_VERSION
 LOCAL_CFLAGS += -DLIBWPA_CLIENT_EXISTS
