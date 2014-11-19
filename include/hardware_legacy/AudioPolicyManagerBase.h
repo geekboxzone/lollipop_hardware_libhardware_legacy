@@ -300,6 +300,7 @@ protected:
 
             audio_io_handle_t mId;                      // input handle
             uint32_t mSamplingRate;                     //
+            uint32_t mReqSamplingRate;                  // SamplingRate that app setted
             audio_format_t mFormat;                     // input configuration
             audio_channel_mask_t mChannelMask;             //
             audio_devices_t mDevice;                    // current device this input is routed to
@@ -569,6 +570,8 @@ protected:
                                               // (must be in mAttachedOutputDevices)
         bool mSpeakerDrcEnabled;// true on devices that use DRC on the DEVICE_CATEGORY_SPEAKER path
                                 // to boost soft sounds, used to adjust volume curves accordingly
+
+        bool isCaptureRateChange;
 
         Vector <HwModule *> mHwModules;
 
