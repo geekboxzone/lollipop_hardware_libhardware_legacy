@@ -50,6 +50,7 @@ enum {
 };
 
 int check_wifi_chip_type(void);
+int check_wifi_chip_type_string(char *type);
 
 int rk_wifi_power_ctrl(int on);
 

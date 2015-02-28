@@ -42,11 +42,40 @@
 #define WIFI_DRIVER_INF         "/sys/class/rkwifi/driver"
 
 int check_wifi_chip_type(void);
+int check_wifi_chip_type_string(char *type);
 int rk_wifi_power_ctrl(int on);
 int rk_wifi_load_driver(int enable);
 int check_wireless_ready(void);
 int get_kernel_version(void);
 
+int check_wifi_chip_type_string(char *type)
+{
+    int wififd, ret = 0;
+    char buf[64];
+    int wifi_chip_type = RTL8188EU;
+
+    wififd = open(WIFI_CHIP_TYPE_PATH, O_RDONLY);
+    if( wififd < 0 ){
+        ALOGD("Can't open %s, errno = %d", WIFI_CHIP_TYPE_PATH, errno);
+        ret = -1;
+        goto fail_exit;
+    }
+    memset(buf, 0, 64);
+
+    if( 0 == read(wififd, buf, 10) ){
+        ALOGD("read %s failed", WIFI_CHIP_TYPE_PATH);
+        close(wififd);
+        ret = -1;
+        goto fail_exit;
+    }
+    close(wififd);
+    
+    strcpy(type, buf);
+    ALOGD("%s: %s", __func__, type);
+
+fail_exit:
+    return ret;
+}
 
 int check_wifi_chip_type(void)
 {
