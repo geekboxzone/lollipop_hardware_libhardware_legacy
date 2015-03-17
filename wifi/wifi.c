@@ -267,7 +267,7 @@ int wifi_load_driver()
     }
 
     ALOGD("%s", __func__);
-    if (wifi_type[0] == 0)
+    /*if (wifi_type[0] == 0)
    		check_wifi_chip_type_string(wifi_type);
    	if (!strcmp(wifi_type, "RTL8723BU")) {
    		if (insmod(RTL8723BU_DRIVER_MODULE_PATH, "") < 0) {
@@ -304,7 +304,7 @@ int wifi_load_driver()
    			ALOGD("%s insmod %s failed", __func__, RTL8812AU_DRIVER_MODULE_PATH);
    			return -1;
    		}
-	} else {
+	} else*/ {
 	    if (rk_wifi_load_driver(1) < 0)
 	        return -1;
     }
@@ -349,7 +349,7 @@ int wifi_unload_driver()
     usleep(200000); /* allow to finish interface down */
 #ifdef WIFI_DRIVER_MODULE_PATH
     ALOGD("%s", __func__);
-    if (wifi_type[0] == 0)
+    /*if (wifi_type[0] == 0)
    		check_wifi_chip_type_string(wifi_type);
    	if (!strcmp(wifi_type, "RTL8723BU")) {
    		ret = rmmod(RTL8723BU_DRIVER_MODULE_NAME);
@@ -365,7 +365,7 @@ int wifi_unload_driver()
    		ret = rmmod(RTL8192DU_DRIVER_MODULE_NAME);
    	} else if (!strcmp(wifi_type, "RTL8812AU")) {
    		ret = rmmod(RTL8812AU_DRIVER_MODULE_NAME);					
-	} else {
+	} else */{
 	    ret = rk_wifi_load_driver(0);
     }
 
