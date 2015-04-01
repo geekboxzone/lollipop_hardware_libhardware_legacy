@@ -40,6 +40,7 @@
 #define WIFI_CHIP_TYPE_PATH	"/sys/class/rkwifi/chip"
 #define WIFI_POWER_INF          "/sys/class/rkwifi/power"
 #define WIFI_DRIVER_INF         "/sys/class/rkwifi/driver"
+#define WIFI_PRELOAD_INF         "/sys/class/rkwifi/preload"
 
 int check_wifi_chip_type(void);
 int check_wifi_chip_type_string(char *type);
@@ -47,6 +48,20 @@ int rk_wifi_power_ctrl(int on);
 int rk_wifi_load_driver(int enable);
 int check_wireless_ready(void);
 int get_kernel_version(void);
+
+int check_wifi_preload(void)
+{
+    int wififd, ret = 0;
+
+    wififd = open(WIFI_PRELOAD_INF, O_RDONLY);
+    if( wififd < 0 ) {
+        ALOGD("%s: Wifi driver is not preload when bootup, load when open wifi.\n", __func__);
+        return 0;
+    }
+    close(wififd);
+    ALOGD("%s: Wifi driver is preload when bootup.\n", __func__);
+    return 1;
+}
 
 int check_wifi_chip_type_string(char *type)
 {

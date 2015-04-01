@@ -221,16 +221,17 @@ const char *get_dhcp_error_string() {
 
 int is_wifi_driver_loaded() {
     char driver_status[PROPERTY_VALUE_MAX];
-#ifdef WIFI_DRIVER_MODULE_PATH
+//#ifdef WIFI_DRIVER_MODULE_PATH
     FILE *proc;
     char line[sizeof(DRIVER_MODULE_TAG)+10];
-#endif
+//#endif
 
     if (!property_get(DRIVER_PROP_NAME, driver_status, NULL)
             || strcmp(driver_status, "ok") != 0) {
         return 0;  /* driver not loaded */
     }
-#ifdef WIFI_DRIVER_MODULE_PATH
+
+if (check_wifi_preload() == 0) { //#ifdef WIFI_DRIVER_MODULE_PATH
     /*
      * If the property says the driver is loaded, check to
      * make sure that the property setting isn't just left
@@ -251,14 +252,14 @@ int is_wifi_driver_loaded() {
     fclose(proc);
     property_set(DRIVER_PROP_NAME, "unloaded");
     return 0;
-#else
+} else { //#else
     return 1;
-#endif
+} //#endif
 }
 
 int wifi_load_driver()
 {
-#ifdef WIFI_DRIVER_MODULE_PATH
+if (check_wifi_preload() == 0) { //#ifdef WIFI_DRIVER_MODULE_PATH
     char driver_status[PROPERTY_VALUE_MAX];
     int count = 100; /* wait at most 20 seconds for completion */
 
@@ -337,17 +338,17 @@ int wifi_load_driver()
     property_set(DRIVER_PROP_NAME, "timeout");
     wifi_unload_driver();
     return -1;
-#else
+} else { //#else
     property_set(DRIVER_PROP_NAME, "ok");
     return 0;
-#endif
+} //#endif
 }
 
 int wifi_unload_driver()
 {
 	int ret;
     usleep(200000); /* allow to finish interface down */
-#ifdef WIFI_DRIVER_MODULE_PATH
+if (check_wifi_preload() == 0) { //#ifdef WIFI_DRIVER_MODULE_PATH
     ALOGD("%s", __func__);
     /*if (wifi_type[0] == 0)
    		check_wifi_chip_type_string(wifi_type);
@@ -384,10 +385,10 @@ int wifi_unload_driver()
         return -1;
     } else
         return -1;
-#else
+} else { //#else
     property_set(DRIVER_PROP_NAME, "unloaded");
     return 0;
-#endif
+} //#endif
 }
 
 int ensure_entropy_file_exists()
