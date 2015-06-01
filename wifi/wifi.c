@@ -512,7 +512,7 @@ int wifi_start_supplicant(int p2p_supported)
     if (wifi_type[0] == 0)
     	check_wifi_chip_type_string(wifi_type);
     if (p2p_supported) {
-		if (get_kernel_version() == KERNEL_VERSION_3_10) {
+		if (1) { //(get_kernel_version() == KERNEL_VERSION_3_10) {
 			if (!strncmp(wifi_type, "ESP", 3)) {  
 				ALOGD("%s: %s", __func__, P2P_SUPPLICANT_NAME);
 				strcpy(supplicant_name, P2P_SUPPLICANT_NAME);
@@ -619,7 +619,7 @@ int wifi_stop_supplicant(int p2p_supported)
     if (wifi_type[0] == 0)
     	check_wifi_chip_type_string(wifi_type);
     if (p2p_supported) {
-		if (get_kernel_version() == KERNEL_VERSION_3_10) {
+		if (1) { //(get_kernel_version() == KERNEL_VERSION_3_10) {
 			if (!strncmp(wifi_type, "ESP", 3)) {  
 				strcpy(supplicant_name, P2P_SUPPLICANT_NAME);
 				strcpy(supplicant_prop_name, P2P_PROP_NAME);
