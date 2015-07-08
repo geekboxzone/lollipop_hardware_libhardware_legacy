@@ -134,8 +134,14 @@ static const char SUPPLICANT_NAME[]     = "wpa_supplicant";
 static const char SUPP_PROP_NAME[]      = "init.svc.wpa_supplicant";
 static const char P2P_SUPPLICANT_NAME[] = "esp_supplicant";
 static const char P2P_PROP_NAME[]       = "init.svc.esp_supplicant";
-static const char BCM_SUPPLICANT_NAME[] = "bcm_supplicant";
-static const char BCM_PROP_NAME[]       = "init.svc.bcm_supplicant";
+static const char BCM_SUPPLICANT_NAME[] = "wpa_supplicant";
+static const char BCM_PROP_NAME[]       = "init.svc.wpa_supplicant";
+static const char BCM_P2P_SUPPLICANT_NAME[] = "p2p_supplicant";
+static const char BCM_P2P_PROP_NAME[]       = "init.svc.p2p_supplicant";
+static const char BCM_SUPPLICANT_NAME1[] = "wpa_supplicant1";
+static const char BCM_PROP_NAME1[]       = "init.svc.wpa_supplicant1";
+static const char BCM_P2P_SUPPLICANT_NAME1[] = "p2p_supplicant1";
+static const char BCM_P2P_PROP_NAME1[]       = "init.svc.p2p_supplicant1";
 static const char RTL_SUPPLICANT_NAME[] = "rtw_suppl_con";
 static const char RTL_PROP_NAME[]       = "init.svc.rtw_suppl_con";
 static const char SUPP_CONFIG_TEMPLATE[]= "/system/etc/wifi/wpa_supplicant.conf";
@@ -512,7 +518,7 @@ int wifi_start_supplicant(int p2p_supported)
     if (wifi_type[0] == 0)
     	check_wifi_chip_type_string(wifi_type);
     if (p2p_supported) {
-		if (1) { //(get_kernel_version() == KERNEL_VERSION_3_10) {
+		if (get_kernel_version() == KERNEL_VERSION_3_10) {
 			if (!strncmp(wifi_type, "ESP", 3)) {  
 				ALOGD("%s: %s", __func__, P2P_SUPPLICANT_NAME);
 				strcpy(supplicant_name, P2P_SUPPLICANT_NAME);
@@ -522,13 +528,24 @@ int wifi_start_supplicant(int p2p_supported)
 				strcpy(supplicant_name, RTL_SUPPLICANT_NAME);
 				strcpy(supplicant_prop_name, RTL_PROP_NAME);			
 			} else {
-				ALOGD("%s: %s", __func__, BCM_SUPPLICANT_NAME);
-				strcpy(supplicant_name, BCM_SUPPLICANT_NAME);
-				strcpy(supplicant_prop_name, BCM_PROP_NAME);
+				ALOGD("%s: %s", __func__, BCM_P2P_SUPPLICANT_NAME);
+				strcpy(supplicant_name, BCM_P2P_SUPPLICANT_NAME);
+				strcpy(supplicant_prop_name, BCM_P2P_PROP_NAME);
 			}
 		} else {
-            strcpy(supplicant_name, P2P_SUPPLICANT_NAME);
-            strcpy(supplicant_prop_name, P2P_PROP_NAME);
+			if (!strncmp(wifi_type, "ESP", 3)) {  
+				ALOGD("%s: %s", __func__, P2P_SUPPLICANT_NAME);
+				strcpy(supplicant_name, P2P_SUPPLICANT_NAME);
+				strcpy(supplicant_prop_name, P2P_PROP_NAME);
+			} else if (!strncmp(wifi_type, "RTL", 3)){
+				ALOGD("%s: %s", __func__, RTL_SUPPLICANT_NAME);
+				strcpy(supplicant_name, RTL_SUPPLICANT_NAME);
+				strcpy(supplicant_prop_name, RTL_PROP_NAME);			
+			} else {
+				ALOGD("%s: %s", __func__, BCM_P2P_SUPPLICANT_NAME1);
+				strcpy(supplicant_name, BCM_P2P_SUPPLICANT_NAME1);
+				strcpy(supplicant_prop_name, BCM_P2P_PROP_NAME1);
+			}
         }
 
         /* Ensure p2p config file is created */
@@ -538,8 +555,8 @@ int wifi_start_supplicant(int p2p_supported)
         }
 
     } else {
-        strcpy(supplicant_name, SUPPLICANT_NAME);
-        strcpy(supplicant_prop_name, SUPP_PROP_NAME);
+        strcpy(supplicant_name, BCM_SUPPLICANT_NAME);
+        strcpy(supplicant_prop_name, BCM_PROP_NAME);
     }
 
     /* Check whether already running */
@@ -619,7 +636,7 @@ int wifi_stop_supplicant(int p2p_supported)
     if (wifi_type[0] == 0)
     	check_wifi_chip_type_string(wifi_type);
     if (p2p_supported) {
-		if (1) { //(get_kernel_version() == KERNEL_VERSION_3_10) {
+		if (get_kernel_version() == KERNEL_VERSION_3_10) {
 			if (!strncmp(wifi_type, "ESP", 3)) {  
 				strcpy(supplicant_name, P2P_SUPPLICANT_NAME);
 				strcpy(supplicant_prop_name, P2P_PROP_NAME);
@@ -627,16 +644,24 @@ int wifi_stop_supplicant(int p2p_supported)
 				strcpy(supplicant_name, RTL_SUPPLICANT_NAME);
 				strcpy(supplicant_prop_name, RTL_PROP_NAME);			
 			} else {
-				strcpy(supplicant_name, BCM_SUPPLICANT_NAME);
-				strcpy(supplicant_prop_name, BCM_PROP_NAME);
+				strcpy(supplicant_name, BCM_P2P_SUPPLICANT_NAME);
+				strcpy(supplicant_prop_name, BCM_P2P_PROP_NAME);
 			}
 		} else {
-			strcpy(supplicant_name, P2P_SUPPLICANT_NAME);
-			strcpy(supplicant_prop_name, P2P_PROP_NAME);
+			if (!strncmp(wifi_type, "ESP", 3)) {  
+				strcpy(supplicant_name, P2P_SUPPLICANT_NAME);
+				strcpy(supplicant_prop_name, P2P_PROP_NAME);
+			} else if (!strncmp(wifi_type, "RTL", 3)){
+				strcpy(supplicant_name, RTL_SUPPLICANT_NAME);
+				strcpy(supplicant_prop_name, RTL_PROP_NAME);			
+			} else {
+				strcpy(supplicant_name, BCM_P2P_SUPPLICANT_NAME1);
+				strcpy(supplicant_prop_name, BCM_P2P_PROP_NAME1);
+			}
 		}
     } else {
-        strcpy(supplicant_name, SUPPLICANT_NAME);
-        strcpy(supplicant_prop_name, SUPP_PROP_NAME);
+        strcpy(supplicant_name, BCM_SUPPLICANT_NAME);
+        strcpy(supplicant_prop_name, BCM_PROP_NAME);
     }
 
     /* Check whether supplicant already stopped */
